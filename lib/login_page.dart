@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_go_router/bloc/user_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatelessWidget {
@@ -28,7 +29,8 @@ class LoginPage extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () {
-                  context.goNamed('main_page');
+                  context.read<UserBloc>().add(SignIn(
+                      email: 'jennie.kim@blackpink.com', password: '123456'));
                 },
                 child: Text(
                   'LOGIN',

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'about_page.dart';
+import 'bloc/user_bloc.dart';
 import 'edit_profile_page.dart';
 import 'main_page.dart';
 import 'login_page.dart';
 import 'profile_page.dart';
-import 'user.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,24 +35,17 @@ class MyApp extends StatelessWidget {
                 return const AboutPage();
               }),
           GoRoute(
-              path: 'profile/:name',
+              path: 'profile',
               name: 'profile',
               builder: (context, state) {
-                String name = state.pathParameters['name'] ?? 'no name';
-                return ProfilePage(name: name);
+                return ProfilePage();
               },
               routes: [
                 GoRoute(
                     path: 'edit_profile',
                     name: 'edit_profile',
                     builder: (context, state) {
-                      Object? object = state.extra;
-                      if (object != null && object is User) {
-                        return EditProfilePage(user: object);
-                      } else {
-                        return const EditProfilePage(
-                            user: User('no name', 'no email'));
-                      }
+                      return EditProfilePage();
                     })
               ]),
         ])
@@ -60,14 +54,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
-      routeInformationProvider: router.routeInformationProvider,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BlocProvider(
+      create: (context) => UserBloc()..add(CheckSignInStatus()),
+      child: BlocListener<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is UserSignedIn) {
+            router.goNamed('main_page');
+          } else if (state is UserSignedOut) {
+            router.goNamed('login');
+          }
+        },
+        child: MaterialApp.router(
+          routeInformationParser: router.routeInformationParser,
+          routerDelegate: router.routerDelegate,
+          routeInformationProvider: router.routeInformationProvider,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+        ),
       ),
     );
   }
