@@ -10,6 +10,8 @@ import 'login_page.dart';
 import 'profile_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MyApp());
 }
 

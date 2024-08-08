@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AboutPage extends StatelessWidget {
@@ -26,14 +25,15 @@ class AboutPage extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ElevatedButton(
-                onPressed: () {
-                  context.goNamed('main_page');
-                },
-                child: Text(
-                  'LOGIN',
-                  style: GoogleFonts.inter(fontWeight: FontWeight.bold),
-                ))
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                style: GoogleFonts.poppins(
+                    fontSize: 14, fontWeight: FontWeight.normal),
+                textAlign: TextAlign.justify,
+              ),
+            ),
           ],
         ),
       ),
